@@ -5,6 +5,7 @@ from nltk.tag.stanford import NERTagger
 import sys
 
 st=NERTagger('./src/stanford-ner-2014-01-04/classifiers/english.muc.7class.distsim.crf.ser.gz','./src/stanford-ner-2014-01-04/stanford-ner.jar')
+stopword = [".", "?", "!"]
 
 def getChunk(tagged_sentence):
     isCont = False
@@ -26,9 +27,26 @@ def getChunk(tagged_sentence):
 
     return res["TIME"],res["DATE"],res["LOCATION"]
 
+def preprocess(content):
+    processed = []
+    for line in content:
+        if len(line)==1 and line[0]=="\n":
+            continue
+        elif line[-1] not in stopword:
+            line+="."
+        line = line.replace("/", " / ")
+        line = line.replace("(", "( ")
+        line = line.replace(")", " )")
+        line = line.replace("  ", " ")
+        processed.append(line)
+    processed = "".join(processed)
+    return processed
+
 def labelEmail(filepath):
     with open(filepath) as fin:
-        content = fin.read()
+        # content = fin.read()
+        content = fin.readlines()
+        content = preprocess(content)
 
     sentences = sent_tokenize(content)
     tokenized_sentences = [word_tokenize(sentence) for sentence in sentences]
