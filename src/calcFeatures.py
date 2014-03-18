@@ -11,7 +11,8 @@ _MonthDict = ["january", "february", "march", "april", "may", "june",
               "july", "august", "september", "october", "november", "december"
               "jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"]
 DayDict = _DateDict + _MonthDict
-UCLADict = ["Boelter", "Hall", "Young"]
+UCLADict = ["Boelter", "Hall", "BH", "Young", "Dashew", "Center", "Career", "Strathmore", "Westwood",
+            "Student", "Activities","Center", "Murphy"]
 ########################################################
 
 ################### Feature Names ######################

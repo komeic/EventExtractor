@@ -6,6 +6,7 @@ from nltk.tokenize import word_tokenize
 from nltk.tag.stanford import NERTagger
 
 import os
+import sys
 import json
 
 def encode(inDir="./data", outDir="./labeled"):
@@ -97,8 +98,10 @@ def recomputeUni(inDir, outDir, outFileName):
     with open(os.path.join(outDir, outFileName), 'w') as fout:
         fout.write(formattedTxt)
 
-def main():
-    recompute()
+def main(argv):
+    inDir = argv[1]
+    outDir = argv[2]
+    encode(inDir,outDir)
 
 if __name__ == '__main__':
-    main()
+    main(sys.argv)

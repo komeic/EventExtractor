@@ -39,6 +39,7 @@ nosetests.xml
 /data/
 /labeled/
 /HMMinput/
+/email/
 /src/stanford-ner-2014-01-04/
 test.py
 .DS_Store
