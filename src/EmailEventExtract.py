@@ -31,6 +31,7 @@ def encode(inDir="./data", outDir="./labeled"):
             email = labelEmail(os.path.join(inDir, file))
             email = json.dumps(email)
             emails.append(email)
+            count += 1
 
     if len(emails) != 0:
         emails = "\n".join(emails)
