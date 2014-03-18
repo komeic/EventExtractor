@@ -31,6 +31,8 @@ def getPOS(tokenized_sentence):
     return simplified
 
 def isCap(tokenized_sentence, i):
+    if tokenized_sentence[i]=="":
+        return False
     return tokenized_sentence[i][0].isupper()
 
 def isNum(tokenized_sentence, pos, i):
@@ -98,7 +100,7 @@ def calc(tokenized_sentence):
 
         features.append(feature)
 
-    return [(tokenized_sentence[i], features[i]) for i in range(0, len(features))]
+    return [features[i] for i in range(0, len(features))]
 
 def main():
     pass

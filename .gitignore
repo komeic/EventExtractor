@@ -37,7 +37,9 @@ nosetests.xml
 
 # Local
 /data/
-/features/
+/labeled/
+/HMMinput/
+/src/stanford-ner-2014-01-04/
 test.py
 .DS_Store
 
