@@ -6,13 +6,15 @@ import sys
 
 ################### Dictionaries #######################
 _DateDict = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday",
-             "mon", "tue", "wed", "thu", "fri", "sat", "sun"]
+             "mon", "tue", "wed", "thu", "fri", "sat", "sun", "tomorrow", "yesterday"]
 _MonthDict = ["january", "february", "march", "april", "may", "june",
               "july", "august", "september", "october", "november", "december"
               "jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"]
 DayDict = _DateDict + _MonthDict
-UCLADict = ["Boelter", "Hall", "BH", "Young", "Dashew", "Center", "Career", "Strathmore", "Westwood",
-            "Student", "Activities","Center", "Murphy"]
+LocationDict = ["Boelter", "Hall", "BH", "Young", "Dashew", "Center", "Career", "Strathmore", "Westwood",
+            "Student", "Activities","Center", "Murphy", "Humanities",
+            "building", "Building", "room", "Room"]
+SpecialChar = ["/", "-", ",", ":"]
 ########################################################
 
 ################### Feature Names ######################
@@ -23,7 +25,8 @@ PREP = "PREP"
 NUM = "NUM"
 DICT_DATE = "DATE"
 TIME = "TIME"
-UCLA_BUILD = "UCLA"
+LOC = "LOC"
+SPECIAL = "SPECIAL"
 ########################################################
 
 def getPOS(tokenized_sentence):
@@ -69,13 +72,24 @@ def isDate(tokenized_sentence, i):
         return False
 
 def isTime(tokenized_sentence, i):
+    if "am" in tokenized_sentence[i].lower():
+        return True
+    if "pm" in tokenized_sentence[i].lower():
+        return True
+    if re.search(r"\d:\d\d", tokenized_sentence[i]):
+        return True
     return False
 
-def isUCLA(tokenized_sentence, i):
-    if tokenized_sentence[i] in UCLADict:
+def isLoc(tokenized_sentence, i):
+    if tokenized_sentence[i] in LocationDict:
         return True
     else:
         return False
+
+def isSpecial(tokenized_sentence, i):
+    if len(tokenized_sentence[i])==1 and tokenized_sentence[i] in SpecialChar:
+        return True
+    return False
 
 def calc(tokenized_sentence):
     pos = getPOS(tokenized_sentence)
@@ -96,9 +110,10 @@ def calc(tokenized_sentence):
             feature.append(DICT_DATE)
         if isTime(tokenized_sentence, i):
             feature.append(TIME)
-        if isUCLA(tokenized_sentence, i):
-            feature.append(UCLA_BUILD)
-
+        if isLoc(tokenized_sentence, i):
+            feature.append(LOC)
+        if isSpecial(tokenized_sentence, i):
+            feature.append(SPECIAL)
         features.append(feature)
 
     return [features[i] for i in range(0, len(features))]

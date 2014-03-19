@@ -32,8 +32,8 @@ def preprocess(content):
     for line in content:
         if len(line)==1 and line[0]=="\n":
             continue
-        elif line[-1] not in stopword:
-            line+="."
+        elif line[-2] not in stopword:
+            line=line[:-1]+".\n"
         line = line.replace("/", " / ")
         line = line.replace("(", "( ")
         line = line.replace(")", " )")

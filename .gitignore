@@ -38,6 +38,7 @@ nosetests.xml
 # Local
 /data/
 /labeled/
+/label*
 /HMMinput/
 /email/
 /src/stanford-ner-2014-01-04/

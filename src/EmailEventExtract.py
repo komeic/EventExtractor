@@ -54,7 +54,7 @@ def decode(filepath):
     """
     with open(filepath) as fin:
         emails = fin.readlines()
-        emails = [email.rstrip("\r\n") for email in emails]
+        emails = [email.decode('utf8').rstrip("\r\n") for email in emails]
         emails = [email.replace("ORGANIZATION", 'O') for email in emails]
         emails = [email.replace("PERSON", 'O') for email in emails]
         emails = [email.replace("MONEY", 'O') for email in emails]
@@ -104,7 +104,7 @@ def recompute(inDir='./labeled', outDir='HMMinput'):
             for email in emails:
                 formattedTxt = formatEmail(email)
                 with open(os.path.join(outDir, file[:-4]+"-%d.txt"%num), 'w') as fout:
-                    fout.write(formattedTxt)
+                    fout.write(formattedTxt.encode('utf8'))
                 num += 1
 
 def recomputeUni(inDir, outDir, outFileName):
@@ -124,7 +124,8 @@ def recomputeUni(inDir, outDir, outFileName):
 def main(argv):
     inDir = argv[1]
     outDir = argv[2]
-    encode(inDir,outDir)
+    # encode(inDir,outDir)
+    recompute(inDir, outDir)
 
 if __name__ == '__main__':
     main(sys.argv)
