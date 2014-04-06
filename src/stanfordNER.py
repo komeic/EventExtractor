@@ -45,7 +45,7 @@ def preprocess(content):
 def labelEmail(filepath):
     with open(filepath) as fin:
         # content = fin.read()
-        content = fin.readlines()
+        content = fin.readlines()[1:]
         content = preprocess(content)
 
     sentences = sent_tokenize(content)

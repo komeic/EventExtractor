@@ -41,7 +41,9 @@ nosetests.xml
 /label*
 /HMMinput/
 /email/
+/EmailExtractor/
 /src/stanford-ner-2014-01-04/
+/src/redis-2.8.7/
 test.py
 .DS_Store
 

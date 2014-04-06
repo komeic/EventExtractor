@@ -1,5 +1,7 @@
 import nltk
 from nltk.tag.simplify import simplify_wsj_tag
+from nltk.corpus import wordnet as wn
+from nltk.corpus import wordnet_ic
 
 import re
 import sys
@@ -11,9 +13,12 @@ _MonthDict = ["january", "february", "march", "april", "may", "june",
               "july", "august", "september", "october", "november", "december"
               "jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"]
 DayDict = _DateDict + _MonthDict
-LocationDict = ["Boelter", "Hall", "BH", "Young", "Dashew", "Center", "Career", "Strathmore", "Westwood",
-            "Student", "Activities","Center", "Murphy", "Humanities",
-            "building", "Building", "room", "Room"]
+LocationDict = ["boelter", "hall", "bh", "franz", "royce", "wooden", "kinsey", "engineering",
+            "haines", "anderson","young", "yrl", "powell", "dashew", "center", "career", "strathmore",
+            "westwood", "student", "activities", "murphy", "humanities", "ackerman","korn", "kretz",
+            "botany", "lu", "valle", "commons", "boyer", "campbell", "molecular", "covel", "ms", "de", "neve",
+            "plaza", "pab", "perloff", "public", "affairs", "rolfe", "hedric", "kaufman", "kerchoff",
+            "building", "room"]
 SpecialChar = ["/", "-", ",", ":"]
 ########################################################
 
@@ -27,7 +32,18 @@ DICT_DATE = "DATE"
 TIME = "TIME"
 LOC = "LOC"
 SPECIAL = "SPECIAL"
+EVENT = "EVENT"
 ########################################################
+
+event=wn.synsets("event", pos="n")[0]
+threshold = 0.16    # threshold value for similarity measure
+def maxPathSim(word):
+    similarity = -1
+    for ss in wn.synsets(word, pos="n"):
+        temp = event.path_similarity(ss)
+        if temp > similarity:
+            similarity = temp
+    return similarity
 
 def getPOS(tokenized_sentence):
     tagged_sent = nltk.pos_tag(tokenized_sentence)
@@ -81,13 +97,18 @@ def isTime(tokenized_sentence, i):
     return False
 
 def isLoc(tokenized_sentence, i):
-    if tokenized_sentence[i] in LocationDict:
+    if tokenized_sentence[i].lower() in LocationDict:
         return True
     else:
         return False
 
 def isSpecial(tokenized_sentence, i):
     if len(tokenized_sentence[i])==1 and tokenized_sentence[i] in SpecialChar:
+        return True
+    return False
+
+def isEvent(tokenized_sentence, i):
+    if maxPathSim(tokenized_sentence[i]) >= threshold:
         return True
     return False
 
@@ -114,6 +135,8 @@ def calc(tokenized_sentence):
             feature.append(LOC)
         if isSpecial(tokenized_sentence, i):
             feature.append(SPECIAL)
+        if isEvent(tokenized_sentence, i):
+            feature.append(EVENT)
         features.append(feature)
 
     return [features[i] for i in range(0, len(features))]

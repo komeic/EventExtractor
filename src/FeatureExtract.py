@@ -1,49 +1,11 @@
 from calcFeatures import calc
-from stanfordNER import labelEmail
 
 from nltk.tokenize import sent_tokenize
 from nltk.tokenize import word_tokenize
-from nltk.tag.stanford import NERTagger
 
 import os
 import sys
 import json
-
-def encode(inDir="./data", outDir="./labeled"):
-    emails = []
-    count = 0
-    num = 0
-    for file in os.listdir(inDir):
-        if file.endswith(".txt"):
-            if count == 10:
-                count=0
-                num+=1
-                emails = "\n".join(emails)
-                outFileName = "LabeledEmails0%d.txt"%num
-                filepath = os.path.join(outDir,outFileName)
-                while os.path.exists(filepath):
-                    num+=1
-                    outFileName = "LabeledEmails0%d.txt"%num
-                    filepath = os.path.join(outDir,outFileName)
-                with open(filepath,'w') as fout:
-                    fout.write(emails)
-                emails = []
-            email = labelEmail(os.path.join(inDir, file))
-            email = json.dumps(email)
-            emails.append(email)
-            count += 1
-
-    if len(emails) != 0:
-        emails = "\n".join(emails)
-        outFileName = "LabeledEmails0%d.txt"%num
-        filepath = os.path.join(outDir,outFileName)
-        while os.path.exists(filepath):
-            num+=1
-            outFileName = "LabeledEmails0%d.txt"%num
-            filepath = os.path.join(outDir,outFileName)
-        with open(filepath,'w') as fout:
-            fout.write(emails)
-        emails = []
 
 def decode(filepath):
     """
@@ -77,7 +39,7 @@ def recomputeFeature(filepath):
     RecomputeFeature for a data in a file
     """
 
-    print "recomputing feature for '%s'"%filepath
+    print "Computing feature for '%s'"%filepath
 
     newEmails = []
     emails = decode(filepath)
@@ -89,7 +51,7 @@ def recomputeFeature(filepath):
             newSentence = [[sentence[i][0] , features[i], sentence[i][2]] for i in range(0, len(sentence))]
             newEmail.append(newSentence)
         newEmails.append(newEmail)
-
+    print "Completed computing feature for %s" % filepath
     return newEmails
 
 def recompute(inDir='./labeled', outDir='HMMinput'):

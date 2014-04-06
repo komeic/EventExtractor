@@ -1,0 +1,24 @@
+>>> for ss in wn.synsets("event",pos="n"):
+...     print ss.definition
+...
+something that happens at a given place and time
+a special set of circumstances
+a phenomenon located at a single point in space-time; the fundamental observational entity in relativity theory
+a phenomenon that follows and is caused by some previous phenomenon
+
+event=wn.synsets("event", pos="n")[0]
+def maxSimilarity(word):
+    similarity = -1
+    for ss in wn.synsets(word, pos="n"):
+        temp = event.path_similarity(ss)
+        if temp > similarity:
+            similarity = temp
+    return similarity
+
+def getMaxSim(word):
+    similarity = -1
+    for ss in wn.synsets(word, pos="n"):
+        temp = event.lch_similarity(ss)
+        if temp > similarity:
+            similarity = temp
+    return similarity

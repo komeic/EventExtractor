@@ -1,0 +1,5 @@
+Place training set in ./email/training/
+Place test email in ./email/test/
+
+Change working directory to ./EmailExtractor
+Then run run.sh
